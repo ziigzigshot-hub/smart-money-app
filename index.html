@@ -1,41 +1,228 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Money Pro</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .active-tab { color: #f97316; border-top: 2px solid #f97316; }
+    </style>
 </head>
-<body class="bg-slate-900 text-white font-sans pb-16">
-    <div class="p-4 bg-slate-800 m-4 rounded-xl shadow-lg flex justify-between items-center">
-        <div>
-            <p class="text-xs text-slate-400">আপনার ব্যালেন্স</p>
-            <h2 class="text-2xl font-bold text-orange-400" id="user-balance">৳10</h2>
-        </div>
-        <button onclick="requestWithdraw()" class="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg font-semibold text-sm">উইথড্র</button>
-    </div>
-    <div class="p-4 space-y-3">
-        <div class="bg-slate-800 p-4 rounded-xl flex justify-between items-center">
-            <div>
-                <h3 class="font-bold">Watch and get reward</h3>
-                <p class="text-xs text-slate-400">৳10 আর্ন করুন</p>
+<body class="bg-slate-900 text-white font-sans min-h-screen pb-20 select-none">
+
+    <!-- Top Header & Balance -->
+    <div class="p-4 bg-slate-800 border-b border-slate-700 sticky top-0 z-10 shadow-lg">
+        <div class="flex justify-between items-center mb-2">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 font-bold">
+                    ৳
+                </div>
+                <div>
+                    <h1 class="text-sm font-semibold text-slate-300">Smart Money Pro</h1>
+                    <p class="text-xs text-slate-400" id="user-name">User</p>
+                </div>
             </div>
-            <button onclick="watchAd()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-sm font-bold">শুরু করুন</button>
+            <button onclick="showSection('wallet')" class="bg-orange-500 hover:bg-orange-600 px-3 py-1.5 rounded-lg text-xs font-bold transition">
+                উইথড্র
+            </button>
+        </div>
+        <div class="bg-slate-900/60 p-3 rounded-xl flex justify-between items-center">
+            <span class="text-xs text-slate-400">মোট ব্যালেন্স</span>
+            <span class="text-2xl font-bold text-orange-400" id="balance">৳0.00</span>
         </div>
     </div>
+
+    <!-- MAIN SECTION: HOME / TASKS -->
+    <div id="sec-home" class="p-4 space-y-4">
+        
+        <!-- Daily Check-in Card -->
+        <div class="bg-gradient-to-r from-orange-600 to-amber-600 rounded-xl p-4 shadow-md flex justify-between items-center">
+            <div>
+                <h3 class="font-bold text-white text-sm">ডেইলি বোনাস</h3>
+                <p class="text-xs text-orange-100">প্রতিদিন ফ্রী ১০ টাকা সংগ্রহ করুন</p>
+            </div>
+            <button id="daily-btn" onclick="claimDailyBonus()" class="bg-white text-orange-600 font-bold px-3 py-1.5 rounded-lg text-xs shadow hover:bg-orange-50 transition">
+                ক্লেম করুন
+            </button>
+        </div>
+
+        <h2 class="text-sm font-bold text-slate-300 flex items-center gap-2">
+            <i class="fa-solid fa-play-circle text-orange-400"></i> বিজ্ঞাপন দেখে ইনকাম করুন
+        </h2>
+
+        <!-- Task 1 -->
+        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700/60 shadow flex justify-between items-center">
+            <div class="space-y-1">
+                <h3 class="font-bold text-sm">ভিডিও অ্যাড #১</h3>
+                <p class="text-xs text-green-400 font-semibold">+ ৳৫.০০ পাবেন</p>
+            </div>
+            <button id="btn-ad-1" onclick="watchAd('btn-ad-1', 5)" class="bg-slate-700 text-orange-400 border border-orange-500/30 font-bold px-4 py-2 rounded-lg text-xs hover:bg-orange-500 hover:text-white transition">
+                দেখুন
+            </button>
+        </div>
+
+        <!-- Task 2 -->
+        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700/60 shadow flex justify-between items-center">
+            <div class="space-y-1">
+                <h3 class="font-bold text-sm">ভিডিও অ্যাড #২</h3>
+                <p class="text-xs text-green-400 font-semibold">+ ৳৫.০০ পাবেন</p>
+            </div>
+            <button id="btn-ad-2" onclick="watchAd('btn-ad-2', 5)" class="bg-slate-700 text-orange-400 border border-orange-500/30 font-bold px-4 py-2 rounded-lg text-xs hover:bg-orange-500 hover:text-white transition">
+                দেখুন
+            </button>
+        </div>
+
+        <!-- Task 3 -->
+        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700/60 shadow flex justify-between items-center">
+            <div class="space-y-1">
+                <h3 class="font-bold text-sm">প্রিমিয়াম অ্যাড Task</h3>
+                <p class="text-xs text-green-400 font-semibold">+ ৳১০.০০ পাবেন</p>
+            </div>
+            <button id="btn-ad-3" onclick="watchAd('btn-ad-3', 10)" class="bg-slate-700 text-orange-400 border border-orange-500/30 font-bold px-4 py-2 rounded-lg text-xs hover:bg-orange-500 hover:text-white transition">
+                দেখুন
+            </button>
+        </div>
+    </div>
+
+    <!-- WALLET SECTION -->
+    <div id="sec-wallet" class="p-4 space-y-4 hidden">
+        <h2 class="text-sm font-bold text-slate-300">টাকা তোলার মাধ্যম নির্বাচন করুন</h2>
+        
+        <div class="grid grid-cols-3 gap-3">
+            <div onclick="selectMethod('bKash')" id="m-bKash" class="p-3 bg-slate-800 rounded-xl border border-slate-700 text-center cursor-pointer hover:border-orange-500">
+                <p class="font-bold text-sm text-pink-500">bKash</p>
+            </div>
+            <div onclick="selectMethod('Nagad')" id="m-Nagad" class="p-3 bg-slate-800 rounded-xl border border-slate-700 text-center cursor-pointer hover:border-orange-500">
+                <p class="font-bold text-sm text-orange-500">Nagad</p>
+            </div>
+            <div onclick="selectMethod('Recharge')" id="m-Recharge" class="p-3 bg-slate-800 rounded-xl border border-slate-700 text-center cursor-pointer hover:border-orange-500">
+                <p class="font-bold text-sm text-blue-400">Recharge</p>
+            </div>
+        </div>
+
+        <div class="bg-slate-800 p-4 rounded-xl space-y-3 border border-slate-700">
+            <div>
+                <label class="text-xs text-slate-400">পেমেন্ট নম্বর</label>
+                <input type="number" id="pay-num" placeholder="017xxxxxxxx" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-white focus:outline-none focus:border-orange-500 mt-1">
+            </div>
+            <div>
+                <label class="text-xs text-slate-400">পরিমান (সর্বনিম্ন ৳৫০)</label>
+                <input type="number" id="pay-amt" placeholder="50" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-white focus:outline-none focus:border-orange-500 mt-1">
+            </div>
+            <button onclick="submitWithdraw()" class="w-full bg-orange-500 hover:bg-orange-600 py-2.5 rounded-lg text-sm font-bold text-white transition">
+                উইথড্র রিকোয়েস্ট পাঠান
+            </button>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION BAR -->
+    <div class="fixed bottom-0 left-0 right-0 bg-slate-800 border-t border-slate-700 flex justify-around py-2 text-slate-400 text-xs">
+        <button onclick="showSection('home')" id="nav-home" class="flex flex-col items-center gap-1 active-tab w-1/2">
+            <i class="fa-solid fa-house text-base"></i>
+            <span>হোম</span>
+        </button>
+        <button onclick="showSection('wallet')" id="nav-wallet" class="flex flex-col items-center gap-1 w-1/2">
+            <i class="fa-solid fa-wallet text-base"></i>
+            <span>ওয়ালেট</span>
+        </button>
+    </div>
+
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
-        function watchAd() {
-            // Replace with your Monetag script link or trigger
-            window.open("https://your-monetag-smartlink-url.com", "_blank");
-            let currentBalance = 10;
-            document.getElementById('user-balance').innerText = `৳${currentBalance + 10}`;
-            alert("Task completed! Reward added.");
+
+        let balance = parseFloat(localStorage.getItem('balance')) || 0.00;
+        let selectedMethod = '';
+
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            document.getElementById('user-name').innerText = tg.initDataUnsafe.user.first_name;
         }
-        function requestWithdraw() {
-            tg.showAlert("Withdrawal requests are processed within 24 hours.");
+
+        function updateBalance() {
+            document.getElementById('balance').innerText = `৳${balance.toFixed(2)}`;
+            localStorage.setItem('balance', balance);
+        }
+        updateBalance();
+
+        function showSection(sec) {
+            document.getElementById('sec-home').classList.add('hidden');
+            document.getElementById('sec-wallet').classList.add('hidden');
+            document.getElementById('nav-home').classList.remove('active-tab');
+            document.getElementById('nav-wallet').classList.remove('active-tab');
+
+            if (sec === 'home') {
+                document.getElementById('sec-home').classList.remove('hidden');
+                document.getElementById('nav-home').classList.add('active-tab');
+            } else {
+                document.getElementById('sec-wallet').classList.remove('hidden');
+                document.getElementById('nav-wallet').classList.add('active-tab');
+            }
+        }
+
+        function claimDailyBonus() {
+            const lastClaim = localStorage.getItem('last_daily');
+            const today = new Date().toDateString();
+            if (lastClaim === today) {
+                alert("আপনি আজকের বোনাস ইতোমধ্যে দাবি করেছেন!");
+                return;
+            }
+            balance += 10.00;
+            localStorage.setItem('last_daily', today);
+            updateBalance();
+            alert("অভিনন্দন! আপনি ১০ টাকা ডেইলি বোনাস পেয়েছেন।");
+        }
+
+        function watchAd(btnId, reward) {
+            const btn = document.getElementById(btnId);
+            btn.disabled = true;
+            let timer = 15;
+            
+            // Monetag SmartLink Direct Link Trigger
+            window.open("https://monetag.com", "_blank"); 
+
+            const interval = setInterval(() => {
+                btn.innerText = `অপেক্ষা করুন (${timer}s)`;
+                timer--;
+                if (timer < 0) {
+                    clearInterval(interval);
+                    balance += reward;
+                    updateBalance();
+                    btn.innerText = "সম্পন্ন";
+                    btn.classList.replace('bg-slate-700', 'bg-green-600');
+                    btn.classList.replace('text-orange-400', 'text-white');
+                    alert(`অভিনন্দন! আপনার ব্যালেন্সে ৳${reward} যোগ করা হয়েছে।`);
+                }
+            }, 1000);
+        }
+
+        function selectMethod(method) {
+            selectedMethod = method;
+            ['bKash', 'Nagad', 'Recharge'].forEach(m => {
+                const el = document.getElementById(`m-${m}`);
+                if (m === method) {
+                    el.classList.add('border-orange-500', 'bg-slate-700');
+                } else {
+                    el.classList.remove('border-orange-500', 'bg-slate-700');
+                }
+            });
+        }
+
+        function submitWithdraw() {
+            const num = document.getElementById('pay-num').value;
+            const amt = parseFloat(document.getElementById('pay-amt').value);
+
+            if (!selectedMethod) return alert("পেমেন্ট পদ্ধতি নির্বাচন করুন!");
+            if (!num || num.length < 11) return alert("সঠিক মোবাইল নম্বর দিন!");
+            if (isNaN(amt) || amt < 50) return alert("সর্বনিম্ন উইথড্র ৳৫০!");
+            if (amt > balance) return alert("আপনার পর্যপ্ত ব্যালেন্স নেই!");
+
+            balance -= amt;
+            updateBalance();
+            alert(`আপনার ৳${amt} উইথড্র রিকোয়েস্ট সফল হয়েছে। ২৪ ঘণ্টার মধ্যে ${selectedMethod} নম্বরে (${num}) পেমেন্ট পাঠানো হবে।`);
         }
     </script>
 </body>
