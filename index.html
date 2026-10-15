@@ -37,10 +37,10 @@
     </div>
 
     <!-- MAIN SECTION: HOME / TASKS -->
-    <div id="sec-home" class="p-4 space-y-4">
+    <div id="sec-home" class="p-4 space-y-3">
         
         <!-- Daily Check-in Card -->
-        <div class="bg-gradient-to-r from-orange-600 to-amber-600 rounded-xl p-4 shadow-md flex justify-between items-center">
+        <div class="bg-gradient-to-r from-orange-600 to-amber-600 rounded-xl p-4 shadow-md flex justify-between items-center mb-4">
             <div>
                 <h3 class="font-bold text-white text-sm">ডেইলি বোনাস</h3>
                 <p class="text-xs text-orange-100">প্রতিদিন ফ্রী ১০ টাকা সংগ্রহ করুন</p>
@@ -50,42 +50,12 @@
             </button>
         </div>
 
-        <h2 class="text-sm font-bold text-slate-300 flex items-center gap-2">
-            <i class="fa-solid fa-play-circle text-orange-400"></i> বিজ্ঞাপন দেখে ইনকাম করুন
+        <h2 class="text-sm font-bold text-slate-300 flex items-center gap-2 mb-2">
+            <i class="fa-solid fa-play-circle text-orange-400"></i> বিজ্ঞাপন দেখে ইনকাম করুন (১০টি টাস্ক)
         </h2>
 
-        <!-- Task 1 -->
-        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700/60 shadow flex justify-between items-center">
-            <div class="space-y-1">
-                <h3 class="font-bold text-sm">ভিডিও অ্যাড #১</h3>
-                <p class="text-xs text-green-400 font-semibold">+ ৳৫.০০ পাবেন</p>
-            </div>
-            <button id="btn-ad-1" onclick="watchAd('btn-ad-1', 5)" class="bg-slate-700 text-orange-400 border border-orange-500/30 font-bold px-4 py-2 rounded-lg text-xs hover:bg-orange-500 hover:text-white transition">
-                দেখুন
-            </button>
-        </div>
-
-        <!-- Task 2 -->
-        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700/60 shadow flex justify-between items-center">
-            <div class="space-y-1">
-                <h3 class="font-bold text-sm">ভিডিও অ্যাড #২</h3>
-                <p class="text-xs text-green-400 font-semibold">+ ৳৫.০০ পাবেন</p>
-            </div>
-            <button id="btn-ad-2" onclick="watchAd('btn-ad-2', 5)" class="bg-slate-700 text-orange-400 border border-orange-500/30 font-bold px-4 py-2 rounded-lg text-xs hover:bg-orange-500 hover:text-white transition">
-                দেখুন
-            </button>
-        </div>
-
-        <!-- Task 3 -->
-        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700/60 shadow flex justify-between items-center">
-            <div class="space-y-1">
-                <h3 class="font-bold text-sm">প্রিমিয়াম অ্যাড Task</h3>
-                <p class="text-xs text-green-400 font-semibold">+ ৳১০.০০ পাবেন</p>
-            </div>
-            <button id="btn-ad-3" onclick="watchAd('btn-ad-3', 10)" class="bg-slate-700 text-orange-400 border border-orange-500/30 font-bold px-4 py-2 rounded-lg text-xs hover:bg-orange-500 hover:text-white transition">
-                দেখুন
-            </button>
-        </div>
+        <!-- 10 AD TASKS CONTAINER -->
+        <div id="ad-tasks-container" class="space-y-3"></div>
     </div>
 
     <!-- WALLET SECTION -->
@@ -135,6 +105,20 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
+        // --- YOUR 10 MONETAG DIRECT LINKS INTEGRATED HERE ---
+        const adLinks = [
+            "https://uplcm.com/4/12038414", // Task 1
+            "https://uplcm.com/4/12038410", // Task 2
+            "https://uplcm.com/4/12038417", // Task 3
+            "https://uplcm.com/4/12038416", // Task 4
+            "https://uplcm.com/4/12038411", // Task 5
+            "https://uplcm.com/4/12038418", // Task 6
+            "https://uplcm.com/4/12038430", // Task 7
+            "https://uplcm.com/4/12038431", // Task 8
+            "https://uplcm.com/4/12038429", // Task 9
+            "https://uplcm.com/4/12038424"  // Task 10
+        ];
+
         let balance = parseFloat(localStorage.getItem('balance')) || 0.00;
         let selectedMethod = '';
 
@@ -147,6 +131,24 @@
             localStorage.setItem('balance', balance);
         }
         updateBalance();
+
+        // Render 10 Ad Task Cards dynamically
+        const container = document.getElementById('ad-tasks-container');
+        adLinks.forEach((link, index) => {
+            const taskNum = index + 1;
+            const card = document.createElement('div');
+            card.className = "bg-slate-800 p-4 rounded-xl border border-slate-700/60 shadow flex justify-between items-center";
+            card.innerHTML = `
+                <div class="space-y-1">
+                    <h3 class="font-bold text-sm">বিজ্ঞাপন টাস্ক #${taskNum}</h3>
+                    <p class="text-xs text-green-400 font-semibold">+ ৳৫.০০ পাবেন</p>
+                </div>
+                <button id="btn-ad-${index}" onclick="watchAd(${index}, 5)" class="bg-slate-700 text-orange-400 border border-orange-500/30 font-bold px-4 py-2 rounded-lg text-xs hover:bg-orange-500 hover:text-white transition">
+                    দেখুন
+                </button>
+            `;
+            container.appendChild(card);
+        });
 
         function showSection(sec) {
             document.getElementById('sec-home').classList.add('hidden');
@@ -176,13 +178,15 @@
             alert("অভিনন্দন! আপনি ১০ টাকা ডেইলি বোনাস পেয়েছেন।");
         }
 
-        function watchAd(btnId, reward) {
-            const btn = document.getElementById(btnId);
+        function watchAd(index, reward) {
+            const btn = document.getElementById(`btn-ad-${index}`);
+            const targetUrl = adLinks[index];
+
             btn.disabled = true;
-            let timer = 15;
+            let timer = 20; // 20-second timer requirement
             
-            // Monetag SmartLink Direct Link Trigger
-            window.open("https://monetag.com", "_blank"); 
+            // Open user's specific Monetag Direct Link
+            window.open(targetUrl, "_blank"); 
 
             const interval = setInterval(() => {
                 btn.innerText = `অপেক্ষা করুন (${timer}s)`;
@@ -191,9 +195,12 @@
                     clearInterval(interval);
                     balance += reward;
                     updateBalance();
-                    btn.innerText = "সম্পন্ন";
-                    btn.classList.replace('bg-slate-700', 'bg-green-600');
-                    btn.classList.replace('text-orange-400', 'text-white');
+                    
+                    // Reset button so user can watch again
+                    btn.disabled = false;
+                    btn.innerText = "আবার দেখুন";
+                    btn.className = "bg-green-600 text-white font-bold px-4 py-2 rounded-lg text-xs hover:bg-green-700 transition";
+                    
                     alert(`অভিনন্দন! আপনার ব্যালেন্সে ৳${reward} যোগ করা হয়েছে।`);
                 }
             }, 1000);
@@ -218,7 +225,7 @@
             if (!selectedMethod) return alert("পেমেন্ট পদ্ধতি নির্বাচন করুন!");
             if (!num || num.length < 11) return alert("সঠিক মোবাইল নম্বর দিন!");
             if (isNaN(amt) || amt < 50) return alert("সর্বনিম্ন উইথড্র ৳৫০!");
-            if (amt > balance) return alert("আপনার পর্যপ্ত ব্যালেন্স নেই!");
+            if (amt > balance) return alert("আপনার পর্যাপ্ত ব্যালেন্স নেই!");
 
             balance -= amt;
             updateBalance();
